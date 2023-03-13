@@ -26,6 +26,7 @@ RUN addgroup -g 1000 -S sales && \
     adduser -u 1000 -h /golang-kubernetes-service -G sales -S sales
 COPY --from=build_sales-api --chown=sales:sales /golang-kubernetes-service /golang-kubernetes-service/golang-kubernetes-service
 WORKDIR /golang-kubernetes-service
+RUN chmod +x golang-kubernetes-service
 CMD ["./golang-kubernetes-service"]
 
 LABEL org.opencontainers.image.created="${BUILD_DATE}" \
