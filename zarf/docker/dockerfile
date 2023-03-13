@@ -22,7 +22,9 @@ RUN go build -ldflags "-X main.build=${BUILD_REF}"
 FROM alpine:3.17
 ARG BUILD_DATE
 ARG BUILD_REF
-COPY --from=build_sales-api /golang-kubernetes-service /golang-kubernetes-service/golang-kubernetes-service
+RUN addgroup -g 1000 -S sales && \
+    adduser -u 1000 -h /golang-kubernetes-service -G sales -S sales
+COPY --from=build_sales-api --chown=sales:sales /golang-kubernetes-service /golang-kubernetes-service/golang-kubernetes-service
 WORKDIR /golang-kubernetes-service
 CMD ["./golang-kubernetes-service"]
 
