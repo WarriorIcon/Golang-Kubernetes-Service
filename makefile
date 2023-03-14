@@ -14,7 +14,7 @@ VERSION := 1.0
 
 all: golang-kubernetes-service
 
-golang-kubernetes-service:
+bill:
 	docker build \
 		-f zarf/docker/dockerfile \
 		-t sales-api:$(VERSION) \

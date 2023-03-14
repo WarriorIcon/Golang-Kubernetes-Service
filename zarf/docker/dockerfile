@@ -12,21 +12,18 @@ ARG BUILD_REF
 # RUN go mod download
 
 # Copy the source code into the container.
-COPY . /golang-kubernetes-service
+COPY . /service
 
 # Build the service binary.
-WORKDIR /golang-kubernetes-service
+WORKDIR /service
 RUN go build -ldflags "-X main.build=${BUILD_REF}"
 
 # Run the Go Binary in Alpine.
 FROM alpine:3.17
 ARG BUILD_DATE
 ARG BUILD_REF
-RUN addgroup -g 1000 -S sales && \
-    adduser -u 1000 -h /golang-kubernetes-service -G sales -S sales
-COPY --from=build_sales-api --chown=sales:sales /golang-kubernetes-service /golang-kubernetes-service/golang-kubernetes-service
-WORKDIR /golang-kubernetes-service
-RUN chmod +x golang-kubernetes-service
+COPY --from=build_sales-api /service/golang-kubernetes-service /service/golang-kubernetes-service
+WORKDIR /service
 CMD ["./golang-kubernetes-service"]
 
 LABEL org.opencontainers.image.created="${BUILD_DATE}" \
